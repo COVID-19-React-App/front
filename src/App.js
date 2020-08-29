@@ -1,26 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import CounterList from "./components/CounterList";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <CounterList counters={[
+                {number: '985 346', text: 'Выявлено заболевших'},
+                {number: '4 941', 'text': 'Выявлено заболевших за последние сутки'},
+                {number: '> 36 млн', 'text': 'Проведено тестов'}
+            ]}/>
+        </div>
+    );
 }
 
 export default App;
