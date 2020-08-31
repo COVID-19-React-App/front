@@ -5,8 +5,8 @@ import './CounterList.css';
 
 const CounterList = (props) => {
     return <div className='counter-list'>
-        {props.counters.map(counter => (
-            <Counter number={counter.number} text={counter.text}/>
+        {props.counters.map((counter, i) => (
+            <Counter key={i} number={counter.number} text={counter.text}/>
         ))}
     </div>
 }

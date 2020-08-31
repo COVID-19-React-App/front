@@ -1,4 +1,4 @@
-@import "../../global/variables"
+@import "../../styles/variables"
 
 .counter
   text-align: center
@@ -6,6 +6,11 @@
   flex: 0 0 auto
 
   &__number
-    font-size: 30px
+    font-size: 36px
     font-weight: 600
-    color: $color-primary
+    color: $color-success
+    text-shadow: 0 5px 2px rgba(150, 150, 150, 0.4)
+
+  &__text
+    font-size: $font-size-lg
+    text-transform: lowercase

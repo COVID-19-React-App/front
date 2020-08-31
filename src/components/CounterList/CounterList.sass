@@ -1,13 +1,13 @@
-@import "../../global/variables"
+@import "../../styles/variables"
 
 .counter-list
   display: flex
-  width: 100%
-  flex-wrap: nowrap
-  overflow-x: auto
-  -webkit-overflow-scrolling: touch
-  -ms-overflow-style: -ms-autohiding-scrollbar
-  align-items: flex-start
+  flex-wrap: wrap
+  justify-content: center
+  padding: $indent-base $indent-lg
+
+  &::-webkit-scrollbar
+    display: none
 
   > *
-    margin-right: $indent-base
+    margin: $indent-base 0

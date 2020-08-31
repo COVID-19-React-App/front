@@ -1,14 +1,14 @@
 .counter-list {
   display: flex;
-  width: 100%;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  -ms-overflow-style: -ms-autohiding-scrollbar;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 10px 20px;
+}
+.counter-list::-webkit-scrollbar {
+  display: none;
 }
 .counter-list > * {
-  margin-right: 10px;
+  margin: 10px 0;
 }
 
 /*# sourceMappingURL=CounterList.css.map */

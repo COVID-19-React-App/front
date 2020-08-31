@@ -1,1 +1,1 @@
-{"version":3,"sourceRoot":"","sources":["Counter.sass","../../global/variables.sass"],"names":[],"mappings":"AAEA;EACE;EACA;EACA;;AAEA;EACE;EACA;EACA,OCJY","file":"Counter.css"}
+{"version":3,"sourceRoot":"","sources":["Counter.sass","../../styles/variables.sass"],"names":[],"mappings":"AAEA;EACE;EACA;EACA;;AAEA;EACE;EACA;EACA,OCHY;EDIZ;;AAEF;EACE,WCVW;EDWX","file":"Counter.css"}

@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from "prop-types";
 import './Counter.css';
 
-const Counter = (props) => {
+const Counter = ({ number, text}) => {
     return <div className='counter'>
         <div className='counter__number'>
-            {props.number}
+            {number}
         </div>
         <div className='counter__text'>
-            {props.text}
+            {text}
         </div>
     </div>;
 }
