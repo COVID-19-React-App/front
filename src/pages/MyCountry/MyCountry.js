@@ -1,4 +1,7 @@
 import React from "react";
+import BarChart from "./BarChart";
+const chance = require("chance").Chance();
+const ARRAY_LENGTH = 10;
 
 const rawData = {
   countrytimelinedata: [
@@ -1579,11 +1582,56 @@ const rawData = {
   ],
 };
 
+function getFeeds() {
+  let feeds = [];
+
+  feeds.push({
+    title: "Visits",
+    data: Array.from(Array(ARRAY_LENGTH)).map((x) =>
+      chance.integer({ min: 0, max: 20 })
+    ),
+  });
+
+  feeds.push({
+    title: "Categories",
+    data: Array.from(Array(ARRAY_LENGTH)).map((x) =>
+      chance.integer({ min: 0, max: 20 })
+    ),
+  });
+
+  feeds.push({
+    title: "Categories",
+    data: Array.from(Array(ARRAY_LENGTH)).map((x) =>
+      chance.integer({ min: 0, max: 20 })
+    ),
+  });
+
+  feeds.push({
+    title: "Data 4",
+    data: Array.from(Array(ARRAY_LENGTH)).map((x) =>
+      chance.integer({ min: 0, max: 20 })
+    ),
+  });
+
+  return feeds;
+}
+
 class MyCountry extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      feeds: getFeeds(),
+    };
+  }
   render() {
     return (
       <div className="my_country">
-        <h1>LOOOOOOL</h1>
+        <BarChart
+          data={this.state.feeds[1].data}
+          title={this.state.feeds[1].title}
+          color="#70CAD1"
+        />
       </div>
     );
   }
