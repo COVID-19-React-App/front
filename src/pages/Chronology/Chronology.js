@@ -1,51 +1,61 @@
 import React, { useEffect, useState } from "react";
 import "@vkontakte/vkui/dist/vkui.css";
-import { Select, Timeline } from "antd";
 import "./Chronology.css";
-//
-// const { Option } = Select;
 // // TODO: попробовать StyledComponents
-// const colorSuccess = "#2d7f06";
 import { Line } from "react-chartjs-2";
 import covidLoader from "../../img/covidLoader.gif";
 import statistic from "../../store/statistic";
-//
-const state = {
-  // labels: ["January", "February", "March", "April", "May"],
-  labels: [],
+import constMeta from "./const";
+import { Select } from "antd";
+import countriesConsts from "./../../store/config";
 
-  datasets: [
-    {
-      label: "Rainfall",
-      fill: false,
-      lineTension: 0.5,
-      backgroundColor: "rgba(75,192,192,1)",
-      borderColor: "rgba(0,0,0,1)",
-      borderWidth: 2,
-      data: [],
-      // data: [65, 59, 80, 81, 56],
-    },
-  ],
+const defaultStat = [null, null];
+
+let changeCountry = (setCountry, setStat, setIsLoading) => {
+  let f = (value) => {
+    setCountry(countriesConsts.contry2code[value]);
+    setStat(defaultStat);
+    setIsLoading(true);
+  };
+  return f;
 };
 
+const countriesOptions = [];
+for (const value of countriesConsts.countriesNames) {
+  countriesOptions.push({ value, disabled: false });
+}
+
+const { Option } = Select;
 function Chronology() {
   let [isLoading, setIsLoading] = useState(true);
   let [isFailed, setFailed] = useState(false);
-  let [stat, setStat] = useState(null);
-  let [country, setCountry] = useState(null);
+  let [stat, setStat] = useState(defaultStat);
+  let [country, setCountry] = useState("US");
+
+  let setter = changeCountry(setCountry, setStat, setIsLoading);
 
   useEffect(() => {
+    console.log(country);
     let err = null;
-    if (stat === null && !isFailed) {
-      err = statistic.handleTotalStat(setStat, setIsLoading);
-      if (err === null) {
+    if (stat === defaultStat && !isFailed) {
+      err = statistic.handleCountryTimeline(setStat, setIsLoading, country);
+      if (err !== null) {
         console.log(err);
+        setFailed(true);
       }
     }
   });
 
   return (
     <div>
+      <h1>Статистика за последнюю неделю</h1>
+      <Select
+        defaultValue="US"
+        onChange={setter}
+        options={countriesOptions}
+        style={{ width: "100%" }}
+      ></Select>
+
       {isLoading && (
         <div>
           <div
@@ -62,34 +72,8 @@ function Chronology() {
       )}
       {!isLoading && (
         <div>
-          <Line
-            data={state}
-            options={{
-              title: {
-                display: true,
-                text: "Average Rainfall per month",
-                fontSize: 20,
-              },
-              legend: {
-                display: true,
-                position: "right",
-              },
-            }}
-          />
-          <Line
-            data={state}
-            options={{
-              title: {
-                display: true,
-                text: "Average Rainfall per month",
-                fontSize: 20,
-              },
-              legend: {
-                display: true,
-                position: "right",
-              },
-            }}
-          />
+          <Line data={stat[0]} options={constMeta.casesOptions} />
+          <Line data={stat[1]} options={constMeta.deathsOptions} />
         </div>
       )}
     </div>

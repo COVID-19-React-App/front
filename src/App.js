@@ -15,7 +15,7 @@ function App() {
     let err = null;
     if (stat.length === 0 && !isFailed) {
       err = statistic.handleTotalStat(setStat, setIsLoading);
-      if (err === null) {
+      if (err !== null) {
         console.log(err);
       }
     }
