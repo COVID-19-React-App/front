@@ -46,6 +46,7 @@ function Chronology() {
     }
   });
 
+  //TODO split to components
   return (
     <div>
       <h1>Статистика за последнюю неделю</h1>

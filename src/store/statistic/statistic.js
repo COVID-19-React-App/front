@@ -69,22 +69,6 @@ let handleCountryTimeline = (setStat, setLoading, country) => {
   const sliceFrom = -7;
 
   axios
-    .get(`${domain}free-api?countryTotals=ALL`)
-    .then((response) => {
-      const data = response.data["countryitems"][0];
-
-      let res = {};
-      for (const [key, value] of Object.entries(data)) {
-        res[value["title"]] = value["code"];
-      }
-      console.log(res);
-    })
-    .catch((error) => {
-      err = "Произошла какая-то хуйня";
-      console.log(error);
-    });
-
-  axios
     .get(`${domain}free-api?countryTimeline=${country}`)
     .then((response) => {
       const doc = response.data["timelineitems"][0];
@@ -115,9 +99,42 @@ let handleCountryTimeline = (setStat, setLoading, country) => {
   return err;
 };
 
+let handleCountriesStat = (setStat, setLoading) => {
+  let res = {};
+  let err = null;
+
+  axios
+    .get(`${domain}free-api?countryTotals=ALL'`)
+    .then((response) => {
+      const doc = response.data["countryitems"][0];
+      let data = [];
+      Object.entries(doc).forEach((item, index) => {
+        item = item[1];
+        if (item.title !== undefined) {
+          data.push({
+            key: index,
+            name: item.title,
+            sick: item.total_active_cases,
+            recover: item.total_recovered,
+            die: item.total_deaths,
+          });
+        }
+      });
+      setStat({ tableData: data });
+      setLoading(false);
+    })
+    .catch((error) => {
+      err = "Произошла какая-то хуйня";
+      console.log(error);
+    });
+
+  return err;
+};
+
 const statistic = {
   handleTotalStat,
   handleCountryTimeline,
+  handleCountriesStat,
 };
 
 export default statistic;

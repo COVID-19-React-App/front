@@ -7,7 +7,6 @@ import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import Chronology from "./pages/Chronology";
 import Menu from "./components/Menu";
 import Countries from "./pages/Countries";
-import MyCountry from "./pages/MyCountry/MyCountry";
 
 const routing = (
   <React.StrictMode>
@@ -15,8 +14,7 @@ const routing = (
       <Switch>
         <Route exact path="/" component={App} />
         <Route path="/chronology" component={Chronology} />
-        {/*<Route path="/countries" component={Countries} />*/}
-        <Route path="/my_country" component={MyCountry} />
+        <Route path="/countries" component={Countries} />
       </Switch>
       <Menu />
     </Router>

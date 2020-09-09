@@ -4,7 +4,6 @@ import {
   Icon28GlobeOutline,
   Icon28GraphOutline,
   Icon28StatisticsOutline,
-  Icon28HomeOutline,
 } from "@vkontakte/icons";
 import "./Menu.css";
 import { withRouter } from "react-router-dom";
@@ -55,15 +54,6 @@ class Menu extends React.Component {
           text="Страны"
         >
           <Icon28GlobeOutline />
-        </TabbarItem>
-
-        <TabbarItem
-          onClick={this.onStoryChange}
-          selected={this.state.activeStory === "my_country"}
-          data-story="my_country"
-          text="В моей стране"
-        >
-          <Icon28HomeOutline />
         </TabbarItem>
       </Tabbar>
     );
