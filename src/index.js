@@ -1,18 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./styles/index.css";
-import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import Chronology from "./pages/Chronology";
 import Menu from "./components/Menu";
 import Countries from "./pages/Countries";
+import Home from "./pages/Home";
+import "antd/dist/antd.css";
+
+
 
 const routing = (
   <React.StrictMode>
     <Router>
       <Switch>
-        <Route exact path="/" component={App} />
+        <Route exact path="/" component={Home} />
         <Route path="/chronology" component={Chronology} />
         <Route path="/countries" component={Countries} />
       </Switch>
