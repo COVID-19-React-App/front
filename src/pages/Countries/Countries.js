@@ -1,11 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import "./Countries.css";
-import rawData from "./data.js";
-
-function onChange(pagination, filters, sorter, extra) {
-  console.log("params", pagination, filters, sorter, extra);
-}
+import statistic from "../../store/statistic";
+import covidLoader from "../../img/covidLoader.gif";
 
 const columns = [
   {
@@ -13,7 +10,6 @@ const columns = [
     dataIndex: "name",
     sorter: (a, b) => a.name.length - b.name.length,
     ellipsis: true,
-    width: 150,
     fixed: "left",
     sortDirections: ["descend", "ascend"],
   },
@@ -21,58 +17,59 @@ const columns = [
     title: "Болеет",
     dataIndex: "sick",
     defaultSortOrder: "descend",
-    width: 100,
     sorter: (a, b) => a.sick - b.sick,
     sortDirections: ["descend", "ascend"],
   },
   {
     title: "Вылечилось",
     dataIndex: "recover",
-    width: 120,
     sorter: (a, b) => a.recover - b.recover,
     sortDirections: ["descend", "ascend"],
   },
   {
     title: "Умерло",
     dataIndex: "die",
-    width: 100,
     sorter: (a, b) => a.die - b.die,
     sortDirections: ["descend", "ascend"],
   },
 ];
 
-const parseData = () => {
-  let data = [];
-  Object.entries(rawData.countryitems[0]).forEach((item, index) => {
-    item = item[1];
-    if (item.title !== undefined) {
-      data.push({
-        key: index,
-        name: item.title,
-        sick: item.total_active_cases,
-        recover: item.total_recovered,
-        die: item.total_deaths,
-      });
+const defaultStat = null;
+
+function Countries() {
+  let [isLoading, setIsLoading] = useState(true);
+  let [isFailed, setFailed] = useState(false);
+  let [stat, setStat] = useState(defaultStat);
+
+  useEffect(() => {
+    let err = null;
+    if (stat === defaultStat && !isFailed) {
+      err = statistic.handleCountriesStat(setStat, setIsLoading);
+      if (err !== null) {
+        console.log(err);
+        setFailed(true);
+      }
     }
   });
-  return data;
-};
 
-const data = parseData();
-
-class Countries extends React.Component {
-  render() {
-    return (
-      <div className="countries">
+  return (
+    <div className="countries">
+      {isLoading && (
+        <div
+          // TODO change className to loader
+          className="logo"
+          style={{ backgroundImage: `url(${covidLoader})` }}
+        />
+      )}
+      {!isLoading && (
         <Table
           columns={columns}
-          dataSource={data}
-          onChange={onChange}
+          dataSource={stat.tableData}
           pagination={{ position: ["topLeft", "none"] }}
         />
-      </div>
-    );
-  }
+      )}
+    </div>
+  );
 }
 
 export default Countries;

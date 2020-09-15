@@ -1,57 +1,84 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "@vkontakte/vkui/dist/vkui.css";
-import { Select, Timeline } from "antd";
 import "./Chronology.css";
+// // TODO: попробовать StyledComponents
+import { Line } from "react-chartjs-2";
+import covidLoader from "../../img/covidLoader.gif";
+import statistic from "../../store/statistic";
+import constMeta from "./const";
+import { Select } from "antd";
+import countriesConsts from "./../../store/config";
+
+const defaultStat = [null, null];
+
+let changeCountry = (setCountry, setStat, setIsLoading) => {
+  let f = (value) => {
+    setCountry(countriesConsts.contry2code[value]);
+    setStat(defaultStat);
+    setIsLoading(true);
+  };
+  return f;
+};
+
+const countriesOptions = [];
+for (const value of countriesConsts.countriesNames) {
+  countriesOptions.push({ value, disabled: false });
+}
 
 const { Option } = Select;
-// TODO: попробовать StyledComponents
-const colorSuccess = "#2d7f06";
+function Chronology() {
+  let [isLoading, setIsLoading] = useState(true);
+  let [isFailed, setFailed] = useState(false);
+  let [stat, setStat] = useState(defaultStat);
+  let [country, setCountry] = useState("US");
 
-export default class Chronology extends React.Component {
-  state = { value: 0, previous: 0 };
+  let setter = changeCountry(setCountry, setStat, setIsLoading);
 
-  render() {
-    return (
-      <div className="chronology">
-        <Select
-          showSearch
-          className="chronology__select"
-          placeholder="Выберите страну"
-          optionFilterProp="children"
-          filterOption={(input, option) =>
-            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-          }
-        >
-          <Option value="RU">Россия</Option>
-          <Option value="EN">Англия</Option>
-        </Select>
-        <Timeline className="chronology__timeline">
-          <Timeline.Item color={colorSuccess}>
-            <div className="chronology__timeline__date">31.08.2020</div>
-            <div className="chronology__timeline__text">
-              <span>20123</span> умерло
-            </div>
-            <div className="chronology__timeline__text">
-              <span>12422</span> вылечилось
-            </div>
-            <div className="chronology__timeline__text">
-              <span>0</span> воскресло
-            </div>
-          </Timeline.Item>
-          <Timeline.Item color={colorSuccess}>
-            <div className="chronology__timeline__date">28.08.2020</div>
-            <div className="chronology__timeline__text">
-              <span>20100</span> умерло
-            </div>
-            <div className="chronology__timeline__text">
-              <span>12042</span> вылечилось
-            </div>
-            <div className="chronology__timeline__text">
-              <span>0</span> воскресло
-            </div>
-          </Timeline.Item>
-        </Timeline>
-      </div>
-    );
-  }
+  useEffect(() => {
+    console.log(country);
+    let err = null;
+    if (stat === defaultStat && !isFailed) {
+      err = statistic.handleCountryTimeline(setStat, setIsLoading, country);
+      if (err !== null) {
+        console.log(err);
+        setFailed(true);
+      }
+    }
+  });
+
+  //TODO split to components
+  return (
+    <div>
+      <h1>Статистика за последнюю неделю</h1>
+      <Select
+        defaultValue="US"
+        onChange={setter}
+        options={countriesOptions}
+        style={{ width: "100%" }}
+      ></Select>
+
+      {isLoading && (
+        <div>
+          <div
+            // TODO change className to loader
+            className="logo"
+            style={{ backgroundImage: `url(${covidLoader})` }}
+          />
+          <div
+            // TODO change className to loader
+            className="logo"
+            style={{ backgroundImage: `url(${covidLoader})` }}
+          />{" "}
+        </div>
+      )}
+      {!isLoading && (
+        <div>
+          <Line data={stat[0]} options={constMeta.casesOptions} />
+          <Line data={stat[1]} options={constMeta.deathsOptions} />
+        </div>
+      )}
+    </div>
+  );
 }
+
+export default Chronology;
