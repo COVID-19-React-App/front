@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import React, {useEffect, useState} from "react";
+import {Table} from "antd";
 import "./Countries.css";
 import statistic from "../../store/statistic";
-import covidLoader from "../../img/covidLoader.gif";
+import Loader from "../../components/Loader";
 
 const columns = [
   {
@@ -50,22 +50,18 @@ function Countries() {
         setFailed(true);
       }
     }
-  });
+  }, [stat, isFailed]);
 
   return (
     <div className="countries">
       {isLoading && (
-        <div
-          // TODO change className to loader
-          className="logo"
-          style={{ backgroundImage: `url(${covidLoader})` }}
-        />
+        <Loader/>
       )}
       {!isLoading && (
         <Table
           columns={columns}
           dataSource={stat.tableData}
-          pagination={{ position: ["topLeft", "none"] }}
+          pagination={{position: ["topLeft", "none"]}}
         />
       )}
     </div>

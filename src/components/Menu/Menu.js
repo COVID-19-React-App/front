@@ -20,6 +20,13 @@ class Menu extends React.Component {
     this.onStoryChange = this.onStoryChange.bind(this);
   }
 
+  componentDidMount() {
+    this.setState({
+        activeStory: this.props.history.location.pathname.replace('/', '')
+      }
+    )
+  }
+
   onStoryChange(e) {
     let nextStory = e.currentTarget.dataset.story;
     this.setState({activeStory: nextStory});

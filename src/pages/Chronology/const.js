@@ -1,7 +1,7 @@
 const casesOptions = {
   title: {
     display: true,
-    text: "Число заражений",
+    text: "Number of infected",
     fontSize: 20,
   },
   legend: {
@@ -12,7 +12,7 @@ const casesOptions = {
 const deathsOptions = {
   title: {
     display: true,
-    text: "Число смертей",
+    text: "Deaths number",
     fontSize: 20,
   },
   legend: {
@@ -20,9 +20,6 @@ const deathsOptions = {
   },
 };
 
-const constMeta = {
-  casesOptions: casesOptions,
-  deathsOptions: deathsOptions,
-};
+const constMeta = [casesOptions, deathsOptions]
 
 export default constMeta;

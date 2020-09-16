@@ -28,7 +28,7 @@ const Text = styled.div`
 `
 
 const CounterBlock = styled.div`
-  width: 40vw;
+  width: 35vw;
   margin-right: 20px;
   text-align: center;
   flex: 0 0 auto;
@@ -47,7 +47,7 @@ const Counter = ({number, text}) => {
 }
 
 Counter.propTypes = {
-  number: PropTypes.string.isRequired,
+  number: PropTypes.number.isRequired,
   text: PropTypes.string.isRequired,
 }
 

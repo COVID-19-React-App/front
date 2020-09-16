@@ -10,7 +10,11 @@ let handleTotalStat = (component) => {
     .get(`${domain}free-api?global=stats`)
     .then((response) => {
       const doc = response.data["results"][0];
-        data = [
+      data = [
+        {
+          text: "active infected",
+          number: utils.beautyCount(doc["total_active_cases"]),
+        },
         {
           text: "got infected",
           number: utils.beautyCount(doc["total_cases"]),
@@ -23,17 +27,13 @@ let handleTotalStat = (component) => {
           text: "cured",
           number: utils.beautyCount(doc["total_recovered"]),
         },
-        {
-          text: "active infected",
-          number: utils.beautyCount(doc["total_active_cases"]),
-        },
       ];
-        component.setState(
-            {
-                isLoading: false,
-                table: data
-            }
-        )
+      component.setState(
+        {
+          isLoading: false,
+          table: data
+        }
+      )
     })
     .catch((error) => {
       err = "Произошла какая-то хуйня";
@@ -105,23 +105,23 @@ let handleCountriesStat = (setStat, setLoading) => {
   axios
     .get(`${domain}free-api?countryTotals=ALL'`)
     .then((response) => {
-        console.log(response)
-        const doc = response.data["countryitems"][0];
-        let data = [];
-        Object.entries(doc).forEach((item, index) => {
-            item = item[1];
-            if (item.title !== undefined) {
-              data.push({
-                key: index,
-                name: item.title,
-                sick: item.total_active_cases,
-                recover: item.total_recovered,
-                die: item.total_deaths,
-              });
-            }
+      console.log(response)
+      const doc = response.data["countryitems"][0];
+      let data = [];
+      Object.entries(doc).forEach((item, index) => {
+        item = item[1];
+        if (item.title !== undefined) {
+          data.push({
+            key: index,
+            name: item.title,
+            sick: item.total_active_cases,
+            recover: item.total_recovered,
+            die: item.total_deaths,
           });
-        setStat({ tableData: data });
-        setLoading(false);
+        }
+      });
+      setStat({tableData: data});
+      setLoading(false);
     })
     .catch((error) => {
       err = "Произошла какая-то хуйня";
@@ -132,7 +132,7 @@ let handleCountriesStat = (setStat, setLoading) => {
 };
 
 const statistic = {
-    handleTotalStat,
+  handleTotalStat,
   handleCountryTimeline,
   handleCountriesStat,
 };
