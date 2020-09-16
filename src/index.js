@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./styles/index.css";
+import "./styles/index.sass";
 import * as serviceWorker from "./serviceWorker";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import Chronology from "./pages/Chronology";

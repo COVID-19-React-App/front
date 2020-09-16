@@ -12,19 +12,19 @@ let handleTotalStat = (component) => {
       const doc = response.data["results"][0];
         data = [
         {
-          text: "Случаев заражения",
+          text: "got infected",
           number: utils.beautyCount(doc["total_cases"]),
         },
         {
-          text: "Погибло",
+          text: "passed away",
           number: utils.beautyCount(doc["total_deaths"]),
         },
         {
-          text: "Выздоровело",
+          text: "cured",
           number: utils.beautyCount(doc["total_recovered"]),
         },
         {
-          text: "Число зараженных",
+          text: "active infected",
           number: utils.beautyCount(doc["total_active_cases"]),
         },
       ];
