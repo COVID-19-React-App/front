@@ -5,38 +5,53 @@ const domain = "https://api.thevirustracker.com/";
 
 let handleTotalStat = (component) => {
   let data = [];
-  let err = null;
   axios
     .get(`${domain}free-api?global=stats`)
     .then((response) => {
       const doc = response.data["results"][0];
-        data = [
+      data = [
         {
-          text: "Случаев заражения",
+          text: "active infected",
+          number: utils.beautyCount(doc["total_active_cases"]),
+        },
+        {
+          text: "got infected",
           number: utils.beautyCount(doc["total_cases"]),
         },
         {
-          text: "Погибло",
+          text: "passed away",
           number: utils.beautyCount(doc["total_deaths"]),
         },
         {
-          text: "Выздоровело",
+          text: "cured",
           number: utils.beautyCount(doc["total_recovered"]),
         },
         {
-          text: "Число зараженных",
-          number: utils.beautyCount(doc["total_active_cases"]),
+          text: "affected countries",
+          number: utils.beautyCount(doc["total_affected_countries"]),
         },
+        {
+          text: "new infected",
+          number: utils.beautyCount(doc["total_new_cases_today"]),
+        },
+        {
+          text: "new deaths",
+          number: utils.beautyCount(doc["total_new_deaths_today"]),
+        },
+        {
+          text: "serious",
+          number: utils.beautyCount(doc["total_serious_cases"]),
+        },
+
       ];
-        component.setState(
-            {
-                isLoading: false,
-                table: data
-            }
-        )
+      component.setState(
+        {
+          isLoading: false,
+          table: data
+        }
+      )
     })
     .catch((error) => {
-      err = "Произошла какая-то хуйня";
       console.log(error);
     })
 };
@@ -99,29 +114,27 @@ let handleCountryTimeline = (setStat, setLoading, country) => {
 };
 
 let handleCountriesStat = (setStat, setLoading) => {
-  let res = {};
   let err = null;
 
   axios
     .get(`${domain}free-api?countryTotals=ALL'`)
     .then((response) => {
-        console.log(response)
-        const doc = response.data["countryitems"][0];
-        let data = [];
-        Object.entries(doc).forEach((item, index) => {
-            item = item[1];
-            if (item.title !== undefined) {
-              data.push({
-                key: index,
-                name: item.title,
-                sick: item.total_active_cases,
-                recover: item.total_recovered,
-                die: item.total_deaths,
-              });
-            }
+      const doc = response.data["countryitems"][0];
+      let data = [];
+      Object.entries(doc).forEach((item, index) => {
+        item = item[1];
+        if (item.title !== undefined) {
+          data.push({
+            key: index,
+            name: item.title,
+            sick: item.total_active_cases,
+            recover: item.total_recovered,
+            die: item.total_deaths,
           });
-        setStat({ tableData: data });
-        setLoading(false);
+        }
+      });
+      setStat(data);
+      setLoading(false);
     })
     .catch((error) => {
       err = "Произошла какая-то хуйня";
@@ -132,7 +145,7 @@ let handleCountriesStat = (setStat, setLoading) => {
 };
 
 const statistic = {
-    handleTotalStat,
+  handleTotalStat,
   handleCountryTimeline,
   handleCountriesStat,
 };

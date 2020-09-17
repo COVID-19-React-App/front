@@ -187,7 +187,7 @@ const countriesNames = Object.keys(contry2code);
 
 const countriesConsts = {
   countriesNames: countriesNames,
-  contry2code: contry2code,
+  country2code: contry2code,
 };
 
 export default countriesConsts;

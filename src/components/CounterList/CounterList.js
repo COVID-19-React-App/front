@@ -1,15 +1,30 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Counter from "../Counter";
-import "./CounterList.css";
+import styled from 'styled-components';
+
+
+const CounterListBlock = styled.div`
+  display: flex;
+  margin: 0 20px;
+  flex-wrap: nowrap;
+  height: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`
 
 const CounterList = (props) => {
   return (
-    <div className="counter-list">
+    <CounterListBlock>
       {props.counters.map((counter, i) => (
-        <Counter key={i} number={counter.number} text={counter.text} />
+        <Counter key={i} number={counter.number} text={counter.text}/>
       ))}
-    </div>
+    </CounterListBlock>
   );
 };
 

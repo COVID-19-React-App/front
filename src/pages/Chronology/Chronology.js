@@ -1,31 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import "@vkontakte/vkui/dist/vkui.css";
-import "./Chronology.css";
-// // TODO: попробовать StyledComponents
-import { Line } from "react-chartjs-2";
-import covidLoader from "../../img/covidLoader.gif";
 import statistic from "../../store/statistic";
-import constMeta from "./const";
-import { Select } from "antd";
 import countriesConsts from "./../../store/config";
+import TitleBlock from "../../components/Title";
+import Loader from "../../components/Loader";
+import PlotList from "../../components/PlotList";
+import Select from "../../components/Select";
+import styled from 'styled-components';
+import {PrimaryColor85} from "../../styles/variables";
 
 const defaultStat = [null, null];
 
 let changeCountry = (setCountry, setStat, setIsLoading) => {
-  let f = (value) => {
-    setCountry(countriesConsts.contry2code[value]);
+  return (value) => {
+    setCountry(countriesConsts.country2code[value]);
     setStat(defaultStat);
     setIsLoading(true);
   };
-  return f;
 };
 
 const countriesOptions = [];
 for (const value of countriesConsts.countriesNames) {
-  countriesOptions.push({ value, disabled: false });
+  countriesOptions.push({value, disabled: false});
 }
 
-const { Option } = Select;
+
+const PlotListWrapper = styled.div`
+  background-color: ${PrimaryColor85};
+  padding: 60px 10px 100px 10px; 
+  border-radius: 40px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  
+  .ant-select {
+    transform: translateY(-70px);
+  }
+  
+  canvas:first-of-type {
+    margin-bottom: 50px;
+  }
+`
+
 function Chronology() {
   let [isLoading, setIsLoading] = useState(true);
   let [isFailed, setFailed] = useState(false);
@@ -35,7 +52,6 @@ function Chronology() {
   let setter = changeCountry(setCountry, setStat, setIsLoading);
 
   useEffect(() => {
-    console.log(country);
     let err = null;
     if (stat === defaultStat && !isFailed) {
       err = statistic.handleCountryTimeline(setStat, setIsLoading, country);
@@ -44,39 +60,20 @@ function Chronology() {
         setFailed(true);
       }
     }
-  });
+  }, [stat, isFailed, country]);
 
-  //TODO split to components
   return (
     <div>
-      <h1>Статистика за последнюю неделю</h1>
-      <Select
-        defaultValue="US"
-        onChange={setter}
-        options={countriesOptions}
-        style={{ width: "100%" }}
-      ></Select>
-
+      <TitleBlock title='LAST WEEK' subtitle='STATISTICS'/>
       {isLoading && (
-        <div>
-          <div
-            // TODO change className to loader
-            className="logo"
-            style={{ backgroundImage: `url(${covidLoader})` }}
-          />
-          <div
-            // TODO change className to loader
-            className="logo"
-            style={{ backgroundImage: `url(${covidLoader})` }}
-          />{" "}
-        </div>
+        <Loader/>
       )}
-      {!isLoading && (
-        <div>
-          <Line data={stat[0]} options={constMeta.casesOptions} />
-          <Line data={stat[1]} options={constMeta.deathsOptions} />
-        </div>
-      )}
+      <PlotListWrapper>
+        <Select options={countriesOptions} onChange={setter}/>
+        {!isLoading && (
+          <PlotList statList={stat}/>
+        )}
+      </PlotListWrapper>
     </div>
   );
 }

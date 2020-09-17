@@ -1,75 +1,65 @@
-import React, { useEffect, useState } from "react";
-import { Table } from "antd";
-import "./Countries.css";
+import React from "react";
+import "./Countries.sass";
 import statistic from "../../store/statistic";
-import covidLoader from "../../img/covidLoader.gif";
+import Loader from "../../components/Loader";
+import TitleBlock from "../../components/Title";
+import CountryList from "../../components/CountryList";
+import MultipleSelect from "../../components/MultipleSelect";
 
-const columns = [
-  {
-    title: "Страна",
-    dataIndex: "name",
-    sorter: (a, b) => a.name.length - b.name.length,
-    ellipsis: true,
-    fixed: "left",
-    sortDirections: ["descend", "ascend"],
-  },
-  {
-    title: "Болеет",
-    dataIndex: "sick",
-    defaultSortOrder: "descend",
-    sorter: (a, b) => a.sick - b.sick,
-    sortDirections: ["descend", "ascend"],
-  },
-  {
-    title: "Вылечилось",
-    dataIndex: "recover",
-    sorter: (a, b) => a.recover - b.recover,
-    sortDirections: ["descend", "ascend"],
-  },
-  {
-    title: "Умерло",
-    dataIndex: "die",
-    sorter: (a, b) => a.die - b.die,
-    sortDirections: ["descend", "ascend"],
-  },
-];
-
-const defaultStat = null;
-
-function Countries() {
-  let [isLoading, setIsLoading] = useState(true);
-  let [isFailed, setFailed] = useState(false);
-  let [stat, setStat] = useState(defaultStat);
-
-  useEffect(() => {
-    let err = null;
-    if (stat === defaultStat && !isFailed) {
-      err = statistic.handleCountriesStat(setStat, setIsLoading);
-      if (err !== null) {
-        console.log(err);
-        setFailed(true);
-      }
+class Countries extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      origin: null,
+      filtered: null,
+      isLoading: true,
+      isFailed: false,
     }
-  });
+  }
 
-  return (
-    <div className="countries">
-      {isLoading && (
-        <div
-          // TODO change className to loader
-          className="logo"
-          style={{ backgroundImage: `url(${covidLoader})` }}
-        />
-      )}
-      {!isLoading && (
-        <Table
-          columns={columns}
-          dataSource={stat.tableData}
-          pagination={{ position: ["topLeft", "none"] }}
-        />
-      )}
-    </div>
-  );
+  filterCountries = ((options) => {
+    let filtered = this.state.origin.filter(item => (options.includes(item.name)));
+    this.setState({...this.state, ...{filtered: filtered}});
+  })
+
+  setOrigin = ((origin) => {
+    this.setState({...this.state, ...{origin: origin}}, (() => {
+      this.filterCountries(["USA", "Russia"])
+    }));
+  })
+
+  setIsLoading = ((isLoading) => {
+    this.setState({...this.state, ...{isLoading: isLoading}});
+  })
+
+
+  componentDidMount() {
+    let err = statistic.handleCountriesStat(this.setOrigin, this.setIsLoading);
+    if (err !== null) {
+      console.log(err);
+      this.setState({...this.state, ...{isFailed: true}});
+    }
+  }
+
+  render() {
+    return (
+      <div className="countries">
+        <TitleBlock title='COUNTRIES' subtitle='STATISTICS'/>
+        {!this.state.isLoading && (
+          <MultipleSelect onChange={this.filterCountries}
+                          options={[this.state.origin.map((country) => (country.name))]}/>
+        )}
+        {this.state.isLoading && (
+          <Loader/>
+        )}
+        {!this.state.isLoading && (
+          <CountryList data={this.state.filtered}/>
+        )}
+      </div>
+    )
+  }
+
+
 }
 
 export default Countries;

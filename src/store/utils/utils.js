@@ -1,15 +1,15 @@
 let beautyCount = (count) => {
   const millions = Math.floor(count / 1000000);
-  if (millions != 0) {
-    return `${millions} M`;
+  if (millions !== 0) {
+    return `${millions}M`;
   }
 
   const thousands = Math.floor(count / 1000);
-  if (thousands != 0) {
-    return `${thousands} K`;
+  if (thousands !== 0) {
+    return `${thousands}K`;
   }
 
-  return count;
+  return `${count}`;
 };
 
 const utils = {
