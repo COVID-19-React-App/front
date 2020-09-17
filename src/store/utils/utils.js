@@ -9,7 +9,7 @@ let beautyCount = (count) => {
     return `${thousands}K`;
   }
 
-  return count;
+  return `${count}`;
 };
 
 const utils = {

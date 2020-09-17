@@ -1,14 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./styles/index.sass";
-import * as serviceWorker from "./serviceWorker";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import {HashRouter as Router, Route, Switch} from "react-router-dom";
 import Chronology from "./pages/Chronology";
 import Menu from "./components/Menu";
 import Countries from "./pages/Countries";
 import Home from "./pages/Home";
 import "antd/dist/antd.css";
-
 
 
 const routing = (

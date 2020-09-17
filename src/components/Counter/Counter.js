@@ -47,7 +47,7 @@ const Counter = ({number, text}) => {
 }
 
 Counter.propTypes = {
-  number: PropTypes.number.isRequired,
+  number: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
 }
 
