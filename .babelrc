@@ -1,6 +1,24 @@
 {
   "presets": [
     "@babel/preset-env",
-    "@babel/preset-react"
+    "@babel/preset-react",
+    "@babel/preset-typescript"
+  ],
+  "plugins": [
+    "react-hot-loader/babel",
+    "@babel/plugin-syntax-class-properties",
+    ["react-css-modules",
+      {
+        "filetypes": {
+          ".scss": {
+            "syntax": "postcss-scss",
+            "plugins": ["postcss-nested"]
+          }
+        },
+        "generateScopedName": "[local]__[hash:base64:5]",
+        "autoResolveMultipleImports": true
+      }
+    ]
   ]
 }
+
